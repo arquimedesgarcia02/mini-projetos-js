@@ -67,7 +67,7 @@ describe('CRUD', () => {
         await page.evaluate(() => deleteClient(0));
     });
 
-    it('função "updateClient"', async () => {
+    it('A função "updateClient" deve modificar um campo ou mais do cliente, e salva-lo na mesmo index', async () => {
         const nome = await page.evaluate(() => document.getElementById('nome').value = "José da silva");
         const email = await page.evaluate(() => document.getElementById('email').value = "josedasilva@email.com");
         const celular = await page.evaluate(() => document.getElementById('celular').value = "00 0000-0000");
@@ -94,7 +94,23 @@ describe('CRUD', () => {
         const readClient = await page.evaluate(() => readClient());
         
         expect(readClient.length).toBeGreaterThan(0);
+
         await page.evaluate(() => deleteClient(0));
+    });
+
+    it('a função "isValidFields" deve verificar se inputs de cliente estão corretos, antes de adicionar no banco de dados, neste caso um input está incorreto, portanto o cliente não sera salvo', async () =>{
+        const nome = await page.evaluate(() => document.getElementById('nome').value = "José da silva");
+        const email = await page.evaluate(() => document.getElementById('email').value = "josédasilva@email.com");
+        const celular = await page.evaluate(() => document.getElementById('celular').value = "00 0000-0000");
+        const cidade = await page.evaluate(() => document.getElementById('cidade').value = "Lugar Nenhum-MG");
+        
+        const saveClient = await page.evaluate(() => saveClient());
+
+        await page.waitForTimeout(1000);
+
+        const readClient = await page.evaluate(() => readClient().length);
+
+        await expect(readClient).toBe(0);
     });
 
 });
