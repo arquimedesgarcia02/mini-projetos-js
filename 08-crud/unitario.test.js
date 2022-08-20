@@ -4,6 +4,7 @@ describe('CRUD', () => {
     beforeAll(async () => {
         await page.goto(`file://${__dirname}/index.html`);
     });
+    
     it ('quando chamar a função "openModal", deve adicianar a classe "modal" o complemento "active".', async () => {
 
         const openModal = await page.evaluate(() => openModal.call());
@@ -72,11 +73,13 @@ describe('CRUD', () => {
 
         await page.waitForTimeout(1000);
 
-        const clientModificado = await page.evaluate(() => document.getElementById('tableClient'));
+        const updateClient = await page.evaluate(() => updateClient(0, { nome:'Elenão', cidade: 'Lulalandia', email: 'elenão@feminista.com' ,celular: '44 4444-4444' }));
 
-        const updateClient = await page.evaluate(() => updateClient(0, clientModificado));
+        await page.waitForTimeout(1000);
 
-        expect(clientModificado.nome).toMatch("Maria da Silva");
-    })
+        const readClient = await page.evaluate(() => readClient()[0]); 
+
+        expect(readClient.nome).toMatch("Elenão");
+    });
 
 });
