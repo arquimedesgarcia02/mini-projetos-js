@@ -46,6 +46,8 @@ describe('CRUD', () => {
         const readClient = await page.evaluate(() => readClient().length);
 
         await expect(readClient).toBe(1);
+
+        await page.evaluate(() => deleteClient(0));
     });
 
     it('ao chamar a função "readClient" ela deve retornar uma array contendo tamanho maior que 0, neste caso de teste ', async () => {
@@ -61,6 +63,8 @@ describe('CRUD', () => {
         const readClient = await page.evaluate(() => readClient().length);
 
         expect(readClient).toBeGreaterThan(0);
+
+        await page.evaluate(() => deleteClient(0));
     });
 
     it('função "updateClient"', async () => {
@@ -80,6 +84,17 @@ describe('CRUD', () => {
         const readClient = await page.evaluate(() => readClient()[0]); 
 
         expect(readClient.nome).toMatch("Elenão");
+
+        await page.evaluate(() => deleteClient(0));
+    });
+
+    it('a função "createClient" deve adicionar o cliente no banco de dados ', async () =>{
+        const createClient = await page.evaluate(() => createClient({ nome:'Elenão', cidade: 'Lulalandia', email: 'elenão@feminista.com' ,celular: '44 4444-4444' }))
+
+        const readClient = await page.evaluate(() => readClient());
+        
+        expect(readClient.length).toBeGreaterThan(0);
+        await page.evaluate(() => deleteClient(0));
     });
 
 });
