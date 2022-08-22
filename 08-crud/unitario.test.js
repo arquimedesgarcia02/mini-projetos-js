@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 
 describe('CRUD', () => {
     beforeAll(async () => {
+        
         await page.goto(`file://${__dirname}/index.html`);
     });
     
@@ -111,6 +112,35 @@ describe('CRUD', () => {
         const readClient = await page.evaluate(() => readClient().length);
 
         await expect(readClient).toBe(0);
+    });
+
+    it('A função "clearFields" deve limpar os campos do modal, apoś a criação de um cliente no crud, para a inserção de novos dados de um novo cliente no modal.', async () =>{
+        const nome = await page.evaluate(() => document.getElementById('nome').value = "José da silva");
+        const email = await page.evaluate(() => document.getElementById('email').value = "josedasilva@email.com");
+        const celular = await page.evaluate(() => document.getElementById('celular').value = "00 0000-0000");
+        const cidade = await page.evaluate(() => document.getElementById('cidade').value = "Lugar Nenhum-MG");
+        
+        const saveClient = await page.evaluate(() => saveClient());
+
+        const clearFields = await page.evaluate(() => clearFields());
+        const openModal = await page.evaluate(() => openModal.call());
+        const modalField = await page.evaluate(() => document.getElementById('nome').value)
+        
+        expect(modalField).toMatch("");
+        await page.evaluate(() => deleteClient(0));
+    });
+
+    it('A função "createRow" deve retornar colunas em uma tabela no html, e neste caso caso de teste usamos a existencia do botão excluir como parametro de teste.', async () =>{
+        const nome = await page.evaluate(() => document.getElementById('nome').value = "José da silva");
+        const email = await page.evaluate(() => document.getElementById('email').value = "josedasilva@email.com");
+        const celular = await page.evaluate(() => document.getElementById('celular').value = "00 0000-0000");
+        const cidade = await page.evaluate(() => document.getElementById('cidade').value = "Lugar Nenhum-MG");
+        
+        const saveClient = await page.evaluate(() => saveClient());
+
+        const row = await page.evaluate(() => document.getElementById('delete-0').textContent);
+
+        await expect(row).toMatch("Excluir");
     });
 
 });
