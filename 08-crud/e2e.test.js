@@ -24,8 +24,21 @@ describe('CRUD', () => {
 
         await expect(classeModal).toMatch('modal');
     });
-    it('', async () =>{
+    it('Ao clicar no botão cadastrar deve abrir, digitar os inputs e ', async () =>{
         await page.click('#cadastrarCliente');
+        
+        await page.focus('#nome');
+        await page.keyboard.type('Jeca Tatu');
+
+        await page.focus('#email');
+        await page.keyboard.type('jeca@tatu.edu.br');
+
+        await page.focus('#cidade');
+        await page.keyboard.type('Jecalandia-MG')
+
+        await page.focus('#celular');
+        await page.keyboard.type('00 0000-0000');
+        
         await page.click('#salvar');
         await page.waitForTimeout(1000);
         const screenshot1 = await page.screenshot({path: `./capturas_de_tela/captura${"_salvar"}.png`});
