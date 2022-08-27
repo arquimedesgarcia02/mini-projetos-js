@@ -24,7 +24,7 @@ describe('CRUD', () => {
 
         await expect(classeModal).toMatch('modal');
     });
-    it('Ao clicar no botão cadastrar deve abrir, digitar os inputs e ', async () =>{
+    it('Ao clicar no botão cadastrar deve abrir, e digitar os inputs, depois que clicar em salvar, deve cadastrar o usuario.', async () =>{
         await page.click('#cadastrarCliente');
         
         await page.focus('#nome');
@@ -41,6 +41,21 @@ describe('CRUD', () => {
         
         await page.click('#salvar');
         await page.waitForTimeout(1000);
+
         const screenshot1 = await page.screenshot({path: `./capturas_de_tela/captura${"_salvar"}.png`});
+        const array = await page.evaluate(() => readClient().length);
+        
+        await expect(array).toBe(2);
     });
+
+    it('Se há um usuario salvo, ao clicar no botão editar abre um modal de editar o usuario, pode-se selecionar um campo para edição e em seguida clica no botão salvar para confirmar', async () => {
+        await page.click('#edit-0');
+        await page.focus('#nome');
+        await page.keyboard.type(' da Silva');
+        await page.click('#salvar');
+
+        const screenshot = await page.screenshot({path: `./capturas_de_tela/captura${"_update"}.png`});
+        await page.evaluate(() => deleteClient(0));
+    });
+
 });

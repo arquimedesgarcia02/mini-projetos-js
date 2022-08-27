@@ -46,7 +46,7 @@ describe('CRUD', () => {
 
         const readClient = await page.evaluate(() => readClient().length);
 
-        await expect(readClient).toBe(1);
+        await expect(readClient).toBe(2);
 
         await page.evaluate(() => deleteClient(0));
     });
@@ -141,6 +141,7 @@ describe('CRUD', () => {
         const row = await page.evaluate(() => document.getElementById('delete-0').textContent);
 
         await expect(row).toMatch("Excluir");
+        await page.evaluate(() => deleteClient(0));
     });
 
 });
